@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/data/save}" th:object="${data}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <p>Generate<input type="submit" th:field="*{randomGeneratedPassword}"></p>
+
+
+<!--    <p><input type="submit" value="Add"></p>-->
+
+</form>
+
+</body>
+</html>
