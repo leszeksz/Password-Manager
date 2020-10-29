@@ -1,10 +1,13 @@
 package com.leszeksz.passwordmanager.service;
 
+import com.leszeksz.passwordmanager.entity.Data;
 import com.leszeksz.passwordmanager.entity.Portal;
+import com.leszeksz.passwordmanager.passwordGenerator.EncDec;
 import com.leszeksz.passwordmanager.repository.PortalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,7 +29,15 @@ public class PortalServiceDb implements PortalService {
 
     @Override
     public List<Portal> findAll() {
-        return portalRepository.findAll();
+        String secretKey = "boooooooooom!!!!";
+
+        List<Portal> portalList = portalRepository.findAll();
+
+        portalList.forEach(portal -> {
+            if(portal.getData()!=null) portal.getData().setRandomGeneratedPassword(EncDec.decrypt(portal.getData().getRandomGeneratedPassword(), secretKey));
+        } );
+
+        return portalList;
     }
 
     @Override

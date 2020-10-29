@@ -45,6 +45,9 @@ public class PortalController {
     public String allPortals(Model model) {
         List<Portal> portalList = this.portalService.findAll();
         List<Data> dataList = dataService.findAll();
+
+
+
         model.addAttribute("portalList", portalList);
         model.addAttribute("data", dataList);
         return "tablePortals";

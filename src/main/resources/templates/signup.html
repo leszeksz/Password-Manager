@@ -44,7 +44,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <div class="signin-form profile">
                 <h2>Sign up</h2>
                 <div class="login-form">
-                    <form th:action="@{/user/save}" th:object="${user}" method="post">
+                    <form th:action="@{/user/add}" th:object="${user}" method="post">
                         <input th:type="text" name="name" placeholder="Name" required="required">
                         <input th:type="text" name="surname" placeholder="Surname" required="required">
 

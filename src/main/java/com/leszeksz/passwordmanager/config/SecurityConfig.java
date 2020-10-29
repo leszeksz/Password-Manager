@@ -1,8 +1,10 @@
 package com.leszeksz.passwordmanager.config;
 
+import com.leszeksz.passwordmanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,7 +19,7 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
     @Autowired
-    DataSource dataSource;
+    UserService userService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder()
@@ -25,35 +27,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+    }
+
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception
     {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
-                .usersByUsernameQuery("SELECT email, password FROM users WHERE email = ?");
-
+        super.configure(auth);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        http.authorizeRequests()
-                .antMatchers("/app/**").authenticated()
-                .anyRequest().permitAll()
-
-                .and()
-                .formLogin()
-                .loginPage("/signin").permitAll()
-                .defaultSuccessUrl("/")
-                .failureUrl("/signin")
-
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/")
-
-                .and()
-                .httpBasic();
+        http.authorizeRequests().antMatchers("/user/add**", "/js/**", "/css/**", "/img/**","/**")
+                .permitAll().anyRequest().authenticated()
+                .and().formLogin().loginPage("/login").permitAll()
+                .and().logout().invalidateHttpSession(true).clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
     }
 }

@@ -26,7 +26,7 @@ public class UserController {
         return "signup";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/add")
     public String save(@Valid User user, BindingResult validation) {
         if (validation.hasErrors()){
             return "signup";
