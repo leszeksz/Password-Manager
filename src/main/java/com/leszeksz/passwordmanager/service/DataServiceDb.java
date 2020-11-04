@@ -2,7 +2,6 @@ package com.leszeksz.passwordmanager.service;
 
 import com.leszeksz.passwordmanager.entity.Data;
 import com.leszeksz.passwordmanager.passwordGenerator.EncDec;
-import com.leszeksz.passwordmanager.passwordGenerator.EncryptionDecryptionAES;
 import com.leszeksz.passwordmanager.passwordGenerator.Generator;
 import com.leszeksz.passwordmanager.repository.DataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
